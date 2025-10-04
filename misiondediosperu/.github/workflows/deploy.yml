@@ -1,5 +1,5 @@
 # Nombre de Workflow
-name: Deploy static content to Pages - Test
+name: Deploy static content to Pages
 
 on:
   # Define el triger que se dispara cuando hay cambio en rama main
