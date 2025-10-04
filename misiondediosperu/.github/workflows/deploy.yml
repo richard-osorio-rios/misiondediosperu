@@ -1,0 +1,53 @@
+# Nombre de Workflow
+name: Deploy static content to Pages - Test
+
+on:
+  # Define el triger que se dispara cuando hay cambio en rama main
+  push:
+    branches: ['main']
+
+  # Define el trigger de ejecucion manual
+  workflow_dispatch:
+
+# EN tiempo de ejecucion solicitan permisos
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Si encuentra un error cancela el proceso
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  # Define el cuerpo del job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    #Computo
+    runs-on: ubuntu-latest
+    # Defino paso
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload dist folder
+          path: './dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
