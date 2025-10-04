@@ -1,5 +1,5 @@
 # Nombre de Workflow
-name: Deploy static content to Pages
+name: Deploy static content to Pages 2025
 
 on:
   # Define el triger que se dispara cuando hay cambio en rama main
